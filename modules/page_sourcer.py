@@ -154,20 +154,20 @@ class SubConfigParser(ISubConfigParser):
     '''
     class to read Scraping 
     '''
-    def parse_sub_section_by_keys(self):
-        data = self._config_data
-        for key in self._sub_config_keys:
-            data = data[key]
+    def parse_sub_section_by_keys(
+            self,
+            sub_config_keys
 
+            ):
+        for key in sub_config_keys:
+            data = data[key]
         return data
     
     def __init__(
             self,
             config_data,
-            sub_config_keys,
             ) -> None:
         self._config_data = config_data
-        self._sub_config_keys = sub_config_keys
 
 
 class IBaseURLsCreater(ABC):

@@ -32,23 +32,23 @@ EXTRACTION:
   product_level :
     product_panel : [ article, ivm_G _PT1R ]
     
-  product_details : [
+  product_details : 
     brand : [
       div, KtWqU FKmne Io521
-      ],
+      ]
     name : [
       h3,  kKGYj TpwNx
-      ],
+      ]
     sale_price : [
       span,  qHz0a EhCiu dls-1n7v84y
-      ],
+      ]
     after_sale_price : [
       span,  fj69a EhCiu dls-1n7v84y
-      ],
+      ]
     ratings: [
       span,  T2Mzf
       ]
-    ]
+
 
 DATA_FEATURES:
   main_features_set : [

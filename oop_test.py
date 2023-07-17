@@ -11,6 +11,7 @@ concat_str_config_keys = ('URL_CONFIG', 'root', 'concat_str')
 driver_path_config_keys = ('DRIVER_OPTIONS','webdriver','chrome','driver_path')
 chrome_options_config_keys = ('DRIVER_OPTIONS','webdriver','chrome','options')
 extraction_config_keys = ('EXTRACTION', 'product_level')
+extraction_product_details = ('EXTRACTION', 'product_details')
 
 start_idx = 1
 sep = '?'
@@ -33,36 +34,15 @@ yaml_reader = YAMLConfigReader(
 )
 
 yaml_data = yaml_reader.read_config()
+scp = SubConfigParser(config_data=yaml_data)
 
-base_urls = SubConfigParser(
-    config_data=yaml_data,
-    sub_config_keys=base_url_config_keys
-).parse_sub_section_by_keys()
-
-extensions = SubConfigParser(
-    config_data=yaml_data,
-    sub_config_keys=extensions_url_config_keys
-).parse_sub_section_by_keys()
-
-concat_str = SubConfigParser(
-    config_data=yaml_data,
-    sub_config_keys=concat_str_config_keys
-).parse_sub_section_by_keys()
-
-webdriver_path = SubConfigParser(
-    config_data=yaml_data,
-    sub_config_keys=driver_path_config_keys
-).parse_sub_section_by_keys()
-
-chrome_options = SubConfigParser(
-    config_data=yaml_data,
-    sub_config_keys=chrome_options_config_keys
-).parse_sub_section_by_keys()
-
-product_details = SubConfigParser(
-    config_data=yaml_data,
-    sub_config_keys=extraction_config_keys
-).parse_sub_section_by_keys()
+base_urls  = scp.parse_sub_section_by_keys(sub_config_keys=base_url_config_keys)
+extensions = scp.parse_sub_section_by_keys(sub_config_keys=extensions_url_config_keys)
+concat_str = scp.parse_sub_section_by_keys(sub_config_keys=concat_str_config_keys)
+webdriver_path = scp.parse_sub_section_by_keys(sub_config_keys=driver_path_config_keys)
+chrome_options = scp.parse_sub_section_by_keys(sub_config_keys=chrome_options_config_keys)
+product_panels = scp.parse_sub_section_by_keys(sub_config_keys=extraction_config_keys)
+product_details = scp.parse_sub_section_by_keys(sub_config_keys=extraction_product_details)
 
 buc = BaseURLsCreater(
     base_urls=base_urls,
@@ -86,8 +66,9 @@ test_url = add_pagination(
 
 )
 print(test_url)
-print(product_details)
-for _, page_attr in product_details.items():
+print(product_panels)
+for _, page_attr in product_panels.items():
+
     div_type, class_attr = page_attr
 
     cpc = ChromePageSourcer(
@@ -111,12 +92,14 @@ for _, page_attr in product_details.items():
     )
 
     for product in products: 
-        for detail in product_details:
-            div_type, field_name_2, attr = detail
+
+        for detail_name, detail_tag in product_details.items():
+            div_type, prod_class_attr = detail_tag
             found_detail = product.find(
                 name=div_type,
                 attrs={
-                    "class" : attr
+                    "class" : prod_class_attr
                     }
-            )
-            print(found_detail)
+                )
+            if found_detail:
+                print(found_detail)
